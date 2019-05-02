@@ -28,13 +28,13 @@ import pe.edu.upc.gamarra.service.ShopService;
 
 @RestController
 @RequestMapping("/shop")
-@Api(value = "REST de información de shop")
+@Api(value = "REST de información de tiendas")
 public class ShopController {
 
 	@Autowired
 	private ShopService shopService;
 	
-	@ApiOperation("Lista de shop")
+	@ApiOperation("Lista de tiendas")
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Shop>> fetchShopes() {
 		try {
@@ -46,7 +46,7 @@ public class ShopController {
 		}
 	}
 	
-	@ApiOperation("Obtener shop por id")
+	@ApiOperation("Obtener información de una tienda por id")
 	@GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Shop> fetchShop(@PathVariable("id") Long id) {
 		try {
@@ -61,7 +61,7 @@ public class ShopController {
 		}		
 	}
 	
-	@ApiOperation("Registro shop")
+	@ApiOperation("Registro de una tienda")
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> saveShop(@Valid @RequestBody Shop shop) {
 		try {
@@ -76,7 +76,7 @@ public class ShopController {
 		}
 	}
 	
-	@ApiOperation("Actualización de información de un shop")
+	@ApiOperation("Actualización de información de una tienda")
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> updateShop(@Valid @RequestBody Shop shop) {
 		try {
@@ -87,7 +87,7 @@ public class ShopController {
 		}
 	}
 	
-	@ApiOperation("Eliminar shop por id")
+	@ApiOperation("Eliminar una tienda por id")
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteShop(@PathVariable("id") Long id) {
 		try {
