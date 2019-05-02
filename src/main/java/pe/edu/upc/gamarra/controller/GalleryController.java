@@ -28,13 +28,13 @@ import pe.edu.upc.gamarra.service.GalleryService;
 
 @RestController
 @RequestMapping("/gallery")
-@Api(value = "REST de información de gallery")
+@Api(value = "REST de información de galerías")
 public class GalleryController {
 
 	@Autowired
 	private GalleryService galleryService;
 	
-	@ApiOperation("Lista de gallery")
+	@ApiOperation("Lista de galerías")
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Gallery>> fetchGalleryes() {
 		try {
@@ -46,7 +46,7 @@ public class GalleryController {
 		}
 	}
 	
-	@ApiOperation("Obtener gallery por id")
+	@ApiOperation("Obtener información de una galería por id")
 	@GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Gallery> fetchGallery(@PathVariable("id") Long id) {
 		try {
@@ -61,7 +61,7 @@ public class GalleryController {
 		}		
 	}
 	
-	@ApiOperation("Registro gallery")
+	@ApiOperation("Registro de una galería")
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> saveGallery(@Valid @RequestBody Gallery gallery) {
 		try {
@@ -76,7 +76,7 @@ public class GalleryController {
 		}
 	}
 	
-	@ApiOperation("Actualización de información de un gallery")
+	@ApiOperation("Actualización de información de un galería")
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> updateGallery(@Valid @RequestBody Gallery gallery) {
 		try {
@@ -87,7 +87,7 @@ public class GalleryController {
 		}
 	}
 	
-	@ApiOperation("Eliminar gallery por id")
+	@ApiOperation("Eliminar una galería por id")
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteGallery(@PathVariable("id") Long id) {
 		try {
