@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="users")
 public class User {
@@ -34,12 +36,16 @@ public class User {
 	@Column(name="DNI", nullable=false, length=255)
 	private String DNI;
 	
-	@Column(name="birthdate", nullable=false)
+	@Column(name="birthdate")
 	@Temporal(TemporalType.DATE)
 	private Date birthdate;
 	
 	@Column(name="gender", nullable=false)
 	private boolean gender;
+	
+	@JsonIgnore
+	@Column(name="password", nullable=false, length=500)
+	private String password;
 	
 	public Long getId() {
 		return id;
@@ -103,6 +109,14 @@ public class User {
 
 	public void setGender(boolean gender) {
 		this.gender = gender;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 }

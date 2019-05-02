@@ -23,13 +23,11 @@ public class Suscription {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	// TODO Se debe no mostrar la información del usuario al obtener la lista de suscripciones
 	@NotNull(message="Debe seleccionar un usuario")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "users_id", nullable=false)
-	private User userId;	
-	
-	@Column(name="nombre", nullable=false, length=75)
-	private String nombre;
+	private User userId;
 	
 	@Column(name="startDate", nullable=false)
 	@Temporal(TemporalType.DATE)
@@ -56,14 +54,6 @@ public class Suscription {
 
 	public void setUserId(User userId) {
 		this.userId = userId;
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
 	}
 
 	public Date getStartDate() {
