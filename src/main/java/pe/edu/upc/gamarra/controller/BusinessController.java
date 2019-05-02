@@ -28,13 +28,13 @@ import pe.edu.upc.gamarra.service.BusinessService;
 
 @RestController
 @RequestMapping("/business")
-@Api(value = "REST de información de business")
+@Api(value = "REST de información de los negocios")
 public class BusinessController {
 
 	@Autowired
 	private BusinessService businessService;
 	
-	@ApiOperation("Lista de business")
+	@ApiOperation("Lista de negocios")
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Business>> fetchBusinesses() {
 		try {
@@ -46,7 +46,7 @@ public class BusinessController {
 		}
 	}
 	
-	@ApiOperation("Obtener business por id")
+	@ApiOperation("Obtener información de una negocio por id")
 	@GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Business> fetchBusiness(@PathVariable("id") Long id) {
 		try {
@@ -61,7 +61,7 @@ public class BusinessController {
 		}		
 	}
 	
-	@ApiOperation("Registro business")
+	@ApiOperation("Registro de un negocio")
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> saveBusiness(@Valid @RequestBody Business business) {
 		try {
@@ -76,7 +76,7 @@ public class BusinessController {
 		}
 	}
 	
-	@ApiOperation("Actualización de información de un business")
+	@ApiOperation("Actualización de información de un negocio")
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> updateBusiness(@Valid @RequestBody Business business) {
 		try {
@@ -87,7 +87,7 @@ public class BusinessController {
 		}
 	}
 	
-	@ApiOperation("Eliminar business por id")
+	@ApiOperation("Eliminar un negocio por id")
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteBusiness(@PathVariable("id") Long id) {
 		try {
