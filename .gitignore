@@ -24,9 +24,6 @@
 /nbdist/
 /.nb-gradle/
 
-### Configuración de la base de datos ###
-*.yml
-
 # Compiled class file
 *.class
 
