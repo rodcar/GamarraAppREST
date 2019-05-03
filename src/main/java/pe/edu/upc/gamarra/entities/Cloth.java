@@ -1,5 +1,9 @@
 package pe.edu.upc.gamarra.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,9 +12,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -39,7 +45,15 @@ public class Cloth {
 	@NotNull(message="Debe seleccionar una categoria")
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="categories_id")
-	private Category categoryId;	
+	private Category categoryId;
+	
+	@OneToMany(mappedBy="clothId", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JsonIgnore
+	private List<UserCloth> userCloth;
+	
+	public Cloth () {
+		userCloth = new ArrayList<>();
+	}
 	
 	public Long getId() {
 		return id;
@@ -87,6 +101,14 @@ public class Cloth {
 
 	public void setCategoryId(Category categoryId) {
 		this.categoryId = categoryId;
+	}
+
+	public List<UserCloth> getUserCloth() {
+		return userCloth;
+	}
+
+	public void setUserCloth(List<UserCloth> userCloth) {
+		this.userCloth = userCloth;
 	}
 	
 }

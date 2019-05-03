@@ -2,6 +2,7 @@ package pe.edu.upc.gamarra.controller;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +24,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import pe.edu.upc.gamarra.entities.Cloth;
 import pe.edu.upc.gamarra.entities.User;
+import pe.edu.upc.gamarra.entities.UserCloth;
+import pe.edu.upc.gamarra.service.ClothService;
 import pe.edu.upc.gamarra.service.UserService;
 
 @RestController
@@ -33,6 +37,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private ClothService clothService;
 	
 	@ApiOperation("Lista de usuarios")
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
@@ -101,6 +108,32 @@ public class UserController {
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@ApiOperation("Registro de un marcador")
+	@PostMapping(value= "/{id}/markers/{idCloth}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> saveUserCloth(@PathVariable("id") Long userId, @PathVariable("idCloth") Long clothId) {
+		try {
+			Optional<User> user = userService.findById(userId);
+			Optional<Cloth> cloth = clothService.findById(clothId);
+			if (user.isPresent() && cloth.isPresent()) {			
+				User e = user.get();
+				Cloth c = cloth.get();
+				UserCloth userCloth = new UserCloth();
+				userCloth.setUserId(e);
+				userCloth.setClothId(c);
+				userCloth.setVisible(true);
+				userCloth.setDateAdded(new Date());
+				e.getUserCloth().add(userCloth);
+				userService.update(e);
+				return new ResponseEntity<Object>(HttpStatus.OK);
+			}else {
+				return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
+			}
+		} catch(Exception e) {
+			System.out.println("Error: " + e.getMessage());
+			return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

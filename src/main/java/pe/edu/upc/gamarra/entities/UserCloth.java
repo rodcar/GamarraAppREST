@@ -2,6 +2,7 @@ package pe.edu.upc.gamarra.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -65,4 +66,17 @@ public class UserCloth implements Serializable{
 		this.dateAdded = dateAdded;
 	}
 	
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserCloth)) return false;
+        UserCloth that = (UserCloth) o;
+        return Objects.equals(userId.getId(), that.userId.getId()) &&
+                Objects.equals(clothId.getId(), that.clothId.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId.getId(), clothId.getId());
+    }	
 }
