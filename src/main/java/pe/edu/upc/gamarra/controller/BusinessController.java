@@ -136,11 +136,9 @@ public class BusinessController {
 			//TODO Evaluar si se requiere el atributo editable
 			shopCloth.setEditable(true);
 			shopCloth = shopClothService.save(shopCloth);
-			Map<String, String> uriVariables = new HashMap<>();
-			uriVariables.put("businessId", businessId.toString());
-			uriVariables.put("shopId", shopId.toString());
-			uriVariables.put("clothId", cloth.getId().toString());
-			URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{clothId}").buildAndExpand(uriVariables)
+
+			URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{clothId}")
+					.buildAndExpand(cloth.getId().toString())
 					.toUri();
 			return ResponseEntity.created(location).build();
 		} catch (Exception e) {

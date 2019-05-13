@@ -11,10 +11,6 @@ import javax.persistence.GenerationType;
 @SuppressWarnings("serial")
 @Embeddable
 public class ShopClothKey implements Serializable {
-	
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(nullable=true)
-	private Long id;
 
 	@Column(name = "shops_id")
 	Long shopId;
@@ -36,14 +32,6 @@ public class ShopClothKey implements Serializable {
 
 	public void setClothId(Long clothId) {
 		this.clothId = clothId;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	@Override
