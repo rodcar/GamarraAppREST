@@ -172,4 +172,24 @@ public class UserController {
 		}
 	}
 	
+	@ApiOperation("Eliminar un marcador por id")
+	@DeleteMapping(value = "/{userId}/markers/{clothId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> deleteUserCloth(@PathVariable("userId") Long userId, @PathVariable("clothId") Long clothId) {	
+		try {
+			Optional<User> u = userService.findById(userId);
+			Optional<Cloth> c = clothService.findById(clothId);
+			Optional<UserCloth> userCloth = userClothService.findByUserIdAndClothId(u.get(), c.get());
+			
+			if (!userCloth.isPresent()) {
+				return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+			} else {
+				userClothService.deleteByUserIdAndClothId(u.get(), c.get());
+				return new ResponseEntity<String>("El marcador se elimino", HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("No se pudo encontrar el marcador", HttpStatus.NOT_FOUND);
+		}
+	}
+	
 }

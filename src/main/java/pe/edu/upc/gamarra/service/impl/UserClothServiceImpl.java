@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import pe.edu.upc.gamarra.entities.Cloth;
 import pe.edu.upc.gamarra.entities.User;
@@ -51,6 +52,12 @@ public class UserClothServiceImpl implements UserClothService {
 	@Override
 	public Optional<UserCloth> findByUserIdAndClothId(User userId, Cloth clothId) throws Exception {
 		return userClothRepository.findByUserIdAndClothId(userId, clothId);
+	}
+
+	@Transactional
+	@Override
+	public void deleteByUserIdAndClothId(User userId, Cloth clothId) throws Exception {
+		userClothRepository.deleteByUserIdAndClothId(userId, clothId);
 	}
 
 }

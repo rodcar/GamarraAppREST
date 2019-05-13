@@ -8,4 +8,6 @@ import pe.edu.upc.gamarra.entities.UserCloth;
 
 public interface UserClothService extends CrudService<UserCloth>{
 	Optional<UserCloth> findByUserIdAndClothId(User userId, Cloth clothId) throws Exception;
+	
+	void deleteByUserIdAndClothId(User userId, Cloth clothId) throws Exception;
 }

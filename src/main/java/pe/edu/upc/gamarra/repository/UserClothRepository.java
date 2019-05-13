@@ -13,4 +13,6 @@ import pe.edu.upc.gamarra.entities.UserClothKey;
 @Repository
 public interface UserClothRepository extends JpaRepository<UserCloth, UserClothKey>{
 	Optional<UserCloth> findByUserIdAndClothId(User userId, Cloth clothId);
+	
+	void deleteByUserIdAndClothId(User userId, Cloth clothId) throws Exception;
 }
