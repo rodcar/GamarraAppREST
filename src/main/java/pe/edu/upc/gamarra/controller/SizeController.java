@@ -27,7 +27,7 @@ import pe.edu.upc.gamarra.entities.Size;
 import pe.edu.upc.gamarra.service.SizeService;
 
 @RestController
-@RequestMapping("/size")
+@RequestMapping("/sizes")
 @Api(value = "REST de información sobra las tallas de ropa")
 public class SizeController {
 

@@ -27,7 +27,7 @@ import pe.edu.upc.gamarra.entities.Cloth;
 import pe.edu.upc.gamarra.service.ClothService;
 
 @RestController
-@RequestMapping("/cloth")
+@RequestMapping("/clothes")
 @Api(value = "REST de información sobre prendas")
 public class ClothController {
 

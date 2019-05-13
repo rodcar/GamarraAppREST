@@ -2,37 +2,49 @@ package pe.edu.upc.gamarra.entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="users_clothes")
 public class UserCloth implements Serializable{
 
-	@Id
+	@EmbeddedId
+	UserClothKey id;
+	
 	@ManyToOne
-	@JoinColumn(name="users_id", nullable=false)
+	@MapsId("users_id")
+	@JoinColumn(name = "users_id", nullable = false)
 	private User userId;
 	
-	@Id
 	@ManyToOne
+	@MapsId("clothes_id")
 	@JoinColumn(name="clothes_id", nullable=false)
 	private Cloth clothId;
 	
 	@Column(name="visible", nullable=false)
-	private boolean visible;
+	private boolean visible = true;
 	
 	@Column(name="dateAdded", nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateAdded;
+
+	public UserClothKey getId() {
+		return id;
+	}
+
+	public void setId(UserClothKey id) {
+		this.id = id;
+	}
 
 	public User getUserId() {
 		return userId;
@@ -65,18 +77,5 @@ public class UserCloth implements Serializable{
 	public void setDateAdded(Date dateAdded) {
 		this.dateAdded = dateAdded;
 	}
-	
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UserCloth)) return false;
-        UserCloth that = (UserCloth) o;
-        return Objects.equals(userId.getId(), that.userId.getId()) &&
-                Objects.equals(clothId.getId(), that.clothId.getId());
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(userId.getId(), clothId.getId());
-    }	
 }

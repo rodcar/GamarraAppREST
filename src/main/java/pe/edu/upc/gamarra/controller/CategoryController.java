@@ -27,7 +27,7 @@ import pe.edu.upc.gamarra.entities.Category;
 import pe.edu.upc.gamarra.service.CategoryService;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/categories")
 @Api(value = "REST de información sobre las categorias de ropa")
 public class CategoryController {
 

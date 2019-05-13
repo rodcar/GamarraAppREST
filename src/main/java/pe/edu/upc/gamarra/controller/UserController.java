@@ -27,11 +27,13 @@ import io.swagger.annotations.ApiOperation;
 import pe.edu.upc.gamarra.entities.Cloth;
 import pe.edu.upc.gamarra.entities.User;
 import pe.edu.upc.gamarra.entities.UserCloth;
+import pe.edu.upc.gamarra.entities.UserClothKey;
 import pe.edu.upc.gamarra.service.ClothService;
+import pe.edu.upc.gamarra.service.UserClothService;
 import pe.edu.upc.gamarra.service.UserService;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 @Api(value = "REST de información de usuarios")
 public class UserController {
 
@@ -40,6 +42,9 @@ public class UserController {
 	
 	@Autowired
 	private ClothService clothService;
+	
+	@Autowired
+	private UserClothService userClothService;
 	
 	@ApiOperation("Lista de usuarios")
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
@@ -112,21 +117,27 @@ public class UserController {
 	}
 	
 	@ApiOperation("Registro de un marcador")
-	@PostMapping(value= "/{id}/markers/{idCloth}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> saveUserCloth(@PathVariable("id") Long userId, @PathVariable("idCloth") Long clothId) {
+	@PostMapping(value= "/{id}/markers", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> saveUserCloth(@PathVariable("id") Long userId, @RequestBody Cloth cloth) {				
 		try {
 			Optional<User> user = userService.findById(userId);
-			Optional<Cloth> cloth = clothService.findById(clothId);
-			if (user.isPresent() && cloth.isPresent()) {			
+			Optional<Cloth> clothFinded = clothService.findById(cloth.getId());
+			
+			if (user.isPresent() && clothFinded.isPresent()) {			
 				User e = user.get();
-				Cloth c = cloth.get();
+				Cloth c = clothFinded.get();
+				
+				UserClothKey key = new UserClothKey();
+				key.setClothId(c.getId());
+				key.setUserId(e.getId());
+				
 				UserCloth userCloth = new UserCloth();
-				userCloth.setUserId(e);
-				userCloth.setClothId(c);
-				userCloth.setVisible(true);
+				userCloth.setId(key);
+				//El valor por defecto de visible es true
+				//userCloth.setVisible(true);
 				userCloth.setDateAdded(new Date());
-				e.getUserCloth().add(userCloth);
-				userService.update(e);
+				
+				userClothService.save(userCloth);
 				return new ResponseEntity<Object>(HttpStatus.OK);
 			}else {
 				return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);

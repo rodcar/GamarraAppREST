@@ -27,7 +27,7 @@ import pe.edu.upc.gamarra.entities.Shop;
 import pe.edu.upc.gamarra.service.ShopService;
 
 @RestController
-@RequestMapping("/shop")
+@RequestMapping("/shops")
 @Api(value = "REST de información de tiendas")
 public class ShopController {
 

@@ -27,7 +27,7 @@ import pe.edu.upc.gamarra.entities.Business;
 import pe.edu.upc.gamarra.service.BusinessService;
 
 @RestController
-@RequestMapping("/business")
+@RequestMapping("/businesses")
 @Api(value = "REST de información de los negocios")
 public class BusinessController {
 
