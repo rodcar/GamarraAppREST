@@ -58,8 +58,7 @@ public class ShopClothServiceImpl implements ShopClothService {
 
 	@Override
 	public List<ShopCloth> findByShopId(Shop shopId) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return shopClothRepository.findByShopId(shopId);
 	}
 
 }

@@ -23,7 +23,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import pe.edu.upc.gamarra.entities.Cloth;
 import pe.edu.upc.gamarra.entities.Shop;
+import pe.edu.upc.gamarra.entities.ShopCloth;
+import pe.edu.upc.gamarra.service.ShopClothService;
 import pe.edu.upc.gamarra.service.ShopService;
 
 @RestController
@@ -33,6 +36,9 @@ public class ShopController {
 
 	@Autowired
 	private ShopService shopService;
+	
+	@Autowired
+	private ShopClothService shopClothService;
 	
 	@ApiOperation("Lista de tiendas")
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
@@ -101,6 +107,26 @@ public class ShopController {
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@ApiOperation("Lista de las prendas de una tienda")
+	@GetMapping(value = "/{id}/clothes", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Cloth>> findClothesByShopId(@PathVariable("id") Long id) {
+		try {
+			Optional<Shop> s = shopService.findById(id);
+			List<ShopCloth> shopClothes = shopClothService.findByShopId(s.get());
+			
+			List<Cloth> clothes = new ArrayList<>();
+			Cloth cloth;
+			for (ShopCloth sc : shopClothes) {
+				cloth = sc.getClothId();
+				clothes.add(cloth);
+			}
+			return new ResponseEntity<List<Cloth>>(clothes, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<List<Cloth>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }
