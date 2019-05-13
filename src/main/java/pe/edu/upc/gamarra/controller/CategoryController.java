@@ -24,7 +24,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import pe.edu.upc.gamarra.entities.Category;
+import pe.edu.upc.gamarra.entities.Cloth;
 import pe.edu.upc.gamarra.service.CategoryService;
+import pe.edu.upc.gamarra.service.ClothService;
 
 @RestController
 @RequestMapping("/categories")
@@ -33,6 +35,9 @@ public class CategoryController {
 
 	@Autowired
 	private CategoryService categoryService;
+	
+	@Autowired
+	private ClothService clothService;
 	
 	@ApiOperation("Lista de categorias de ropa")
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
@@ -101,6 +106,19 @@ public class CategoryController {
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@ApiOperation("Lista de prendas por categoría")
+	@GetMapping(value = "/{id}/clothes", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Cloth>> getClothesByCategoryId(@PathVariable("id") Long id) {
+		try {
+			Optional<Category> category = categoryService.findById(id);
+			List<Cloth> clothes = clothService.findByCategoryId(category.get());
+			return new ResponseEntity<>(clothes, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<List<Cloth>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }
