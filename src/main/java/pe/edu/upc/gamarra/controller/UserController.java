@@ -147,4 +147,29 @@ public class UserController {
 			return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	// TODO Se debe implementar la restricción de no cambiar la fecha de registro del marcador
+	@ApiOperation("Actualización de la información de un marcador")
+	@PutMapping(value = "/{userId}/markers/{clothId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> updateUserCloth(@PathVariable("userId") Long userId, @PathVariable("clothId") Long clothId, @RequestBody UserCloth userCloth) {
+		try {
+			Optional<User> user = userService.findById(userId);
+			Optional<Cloth> clothFinded = clothService.findById(clothId);
+			
+			User e = user.get();
+			Cloth c = clothFinded.get();
+			
+			UserClothKey key = new UserClothKey();
+			key.setClothId(c.getId());
+			key.setUserId(e.getId());
+			
+			userCloth.setId(key);
+			userClothService.update(userCloth);
+			return new ResponseEntity<Object>(HttpStatus.OK);
+		} catch (Exception e) {			
+			e.printStackTrace();
+			return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 }
