@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import pe.edu.upc.gamarra.entities.Cloth;
 import pe.edu.upc.gamarra.entities.Shop;
@@ -49,6 +50,7 @@ public class ShopClothServiceImpl implements ShopClothService {
 		return shopClothRepository.findByShopIdAndClothId(shopId, ClothId);
 	}
 
+	@Transactional
 	@Override
 	public void deleteByShopIdAndClothId(Shop shopId, Cloth clothId) throws Exception {
 		shopClothRepository.deleteByShopIdAndClothId(shopId, clothId);		

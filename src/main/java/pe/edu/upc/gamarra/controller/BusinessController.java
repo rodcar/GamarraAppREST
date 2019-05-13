@@ -123,7 +123,7 @@ public class BusinessController {
 		}
 	}
 	
-	@ApiOperation("Registro de una prenda en una tienda")
+	@ApiOperation("Registro de una asociación entre una prenda y una tienda")
 	@PostMapping(value = "/{businessId}/shops/{shopId}/clothes")
 	public ResponseEntity<Object> saveShopCloth(@PathVariable("businessId") Long businessId, @PathVariable("shopId") Long shopId, @RequestBody Cloth cloth) {
 		try {
@@ -146,4 +146,25 @@ public class BusinessController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@ApiOperation("Elimina una asociación entre una prenda y una tienda")
+	@DeleteMapping(value = "/{businessId}/shops/{shopId}/clothes/{clothId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> deleteShopCloth(@PathVariable("businessId") Long businessId, @PathVariable("shopId") Long shopId, @PathVariable("clothId") Long clothId) {
+		try {
+			Optional<Shop> s = shopService.findById(shopId);
+			Optional<Cloth> c = clothService.findById(clothId);
+			Optional<ShopCloth> shopCloth = shopClothService.findByShopIdAndClothId(s.get(), c.get());
+			
+			if(!shopCloth.isPresent()) {				
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			} else {
+				shopClothService.deleteByShopIdAndClothId(s.get(), c.get());
+				return new ResponseEntity<>("La prenda se eliminó de la tienda", HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 }
