@@ -16,7 +16,7 @@ import javax.persistence.TemporalType;
 @SuppressWarnings("serial")
 @Entity
 @Table(name="users_clothes")
-public class UserCloth implements Serializable{
+public class UserCloth implements Serializable {
 
 	@EmbeddedId
 	UserClothKey id;

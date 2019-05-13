@@ -24,6 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import pe.edu.upc.gamarra.entities.Business;
+import pe.edu.upc.gamarra.entities.Cloth;
 import pe.edu.upc.gamarra.service.BusinessService;
 
 @RestController
@@ -103,4 +104,5 @@ public class BusinessController {
 			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
 }

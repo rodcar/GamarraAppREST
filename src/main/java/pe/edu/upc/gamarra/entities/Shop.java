@@ -1,5 +1,8 @@
 package pe.edu.upc.gamarra.entities;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,8 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="shops")
@@ -38,6 +44,10 @@ public class Shop {
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="galleries_id", nullable=false)
 	private Gallery galleryId;
+	
+	@OneToMany(mappedBy="shopId", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JsonIgnore
+	private List<ShopCloth> shopCloth;
 
 	public Long getId() {
 		return id;
@@ -95,4 +105,12 @@ public class Shop {
 		this.galleryId = galleryId;
 	}
 
+	public List<ShopCloth> getShopCloth() {
+		return shopCloth;
+	}
+
+	public void setShopCloth(List<ShopCloth> shopCloth) {
+		this.shopCloth = shopCloth;
+	}
+	
 }

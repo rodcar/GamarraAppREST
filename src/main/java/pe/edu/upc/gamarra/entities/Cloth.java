@@ -51,6 +51,10 @@ public class Cloth {
 	@JsonIgnore
 	private List<UserCloth> userCloth;
 	
+	@OneToMany(mappedBy="clothId", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JsonIgnore
+	private List<ShopCloth> shopCloth;
+	
 	public Cloth () {
 		userCloth = new ArrayList<>();
 	}
@@ -109,6 +113,14 @@ public class Cloth {
 
 	public void setUserCloth(List<UserCloth> userCloth) {
 		this.userCloth = userCloth;
+	}
+
+	public List<ShopCloth> getShopCloth() {
+		return shopCloth;
+	}
+
+	public void setShopCloth(List<ShopCloth> shopCloth) {
+		this.shopCloth = shopCloth;
 	}
 	
 }
