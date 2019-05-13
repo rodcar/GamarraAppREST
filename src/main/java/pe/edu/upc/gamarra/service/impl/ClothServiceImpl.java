@@ -52,4 +52,9 @@ public class ClothServiceImpl implements ClothService {
 		return clothRepository.findByCategoryId(category);
 	}
 
+	@Override
+	public List<Cloth> findByNameContaining(String name) {
+		return clothRepository.findByNameContaining(name);
+	}
+
 }

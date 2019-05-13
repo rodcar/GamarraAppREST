@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -36,13 +37,18 @@ public class ClothController {
 	
 	@ApiOperation("Lista de prendas")
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Cloth>> fetchClothes() {
-		try {
-			List<Cloth> clothes = new ArrayList<>();
-			clothes = clothService.findAll();
+	public ResponseEntity<List<Cloth>> fetchClothes(@RequestParam(name = "name", required = false) String name) {
+		if (name == null) {
+			try {
+				List<Cloth> clothes = new ArrayList<>();
+				clothes = clothService.findAll();
+				return new ResponseEntity<List<Cloth>>(clothes, HttpStatus.OK);
+			} catch (Exception e) {
+				return new ResponseEntity<List<Cloth>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		} else {
+			List<Cloth> clothes = clothService.findByNameContaining(name);
 			return new ResponseEntity<List<Cloth>>(clothes, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<List<Cloth>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	

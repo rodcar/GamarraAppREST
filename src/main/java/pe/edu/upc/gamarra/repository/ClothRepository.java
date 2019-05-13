@@ -14,4 +14,7 @@ public interface ClothRepository extends JpaRepository<Cloth, Long>{
 	Optional<Cloth> findById(Long id);
 	
 	List<Cloth> findByCategoryId(Category category);
+	
+	// Obtiene la lista de prendas cuyos nombre contengan el valor de la variabl "name"
+	List<Cloth> findByNameContaining(String name);
 }
