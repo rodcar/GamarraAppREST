@@ -60,4 +60,9 @@ public class UserClothServiceImpl implements UserClothService {
 		userClothRepository.deleteByUserIdAndClothId(userId, clothId);
 	}
 
+	@Override
+	public List<UserCloth> findByUserId(User userId) throws Exception {		
+		return userClothRepository.findByUserId(userId);
+	}
+
 }

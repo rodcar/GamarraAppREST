@@ -116,6 +116,28 @@ public class UserController {
 		}
 	}
 	
+	@ApiOperation("Lista de marcadores")
+	@GetMapping(value = "/{id}/markers", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Cloth>> fetchMarkers(@PathVariable("id") Long userId) {		
+		try {
+			Optional<User> u = userService.findById(userId);
+			List<UserCloth> userMarkers = userClothService.findByUserId(u.get());
+			List<Cloth> markers = new ArrayList<>();
+		
+			Long clothId;
+			Optional<Cloth> clothFinded;
+			for (UserCloth c : userMarkers) {
+				clothId = c.getClothId().getId();
+				clothFinded = clothService.findById(clothId);
+				markers.add(clothFinded.get());
+			}
+			return new ResponseEntity<>(markers, HttpStatus.OK);
+		} catch (Exception e) {		
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 	@ApiOperation("Registro de un marcador")
 	@PostMapping(value= "/{id}/markers", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> saveUserCloth(@PathVariable("id") Long userId, @RequestBody Cloth cloth) {				
