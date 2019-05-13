@@ -2,7 +2,10 @@ package pe.edu.upc.gamarra.controller;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -25,7 +28,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import pe.edu.upc.gamarra.entities.Business;
 import pe.edu.upc.gamarra.entities.Cloth;
+import pe.edu.upc.gamarra.entities.Shop;
+import pe.edu.upc.gamarra.entities.ShopCloth;
+import pe.edu.upc.gamarra.entities.ShopClothKey;
 import pe.edu.upc.gamarra.service.BusinessService;
+import pe.edu.upc.gamarra.service.ClothService;
+import pe.edu.upc.gamarra.service.ShopClothService;
+import pe.edu.upc.gamarra.service.ShopService;
 
 @RestController
 @RequestMapping("/businesses")
@@ -34,6 +43,15 @@ public class BusinessController {
 
 	@Autowired
 	private BusinessService businessService;
+	
+	@Autowired
+	private ShopClothService shopClothService;
+	
+	@Autowired
+	private ShopService shopService;
+	
+	@Autowired
+	private ClothService clothService;
 	
 	@ApiOperation("Lista de negocios")
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
@@ -105,4 +123,29 @@ public class BusinessController {
 		}
 	}
 	
+	@ApiOperation("Registro de una prenda en una tienda")
+	@PostMapping(value = "/{businessId}/shops/{shopId}/clothes")
+	public ResponseEntity<Object> saveShopCloth(@PathVariable("businessId") Long businessId, @PathVariable("shopId") Long shopId, @RequestBody Cloth cloth) {
+		try {
+			ShopClothKey key = new ShopClothKey();
+			key.setShopId(shopId);
+			key.setClothId(cloth.getId());
+			ShopCloth shopCloth = new ShopCloth();
+			shopCloth.setId(key);
+			shopCloth.setDateAdded(new Date());
+			//TODO Evaluar si se requiere el atributo editable
+			shopCloth.setEditable(true);
+			shopCloth = shopClothService.save(shopCloth);
+			Map<String, String> uriVariables = new HashMap<>();
+			uriVariables.put("businessId", businessId.toString());
+			uriVariables.put("shopId", shopId.toString());
+			uriVariables.put("clothId", cloth.getId().toString());
+			URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{clothId}").buildAndExpand(uriVariables)
+					.toUri();
+			return ResponseEntity.created(location).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }
