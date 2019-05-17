@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pe.edu.upc.gamarra.entities.Suscription;
+import pe.edu.upc.gamarra.entities.User;
 import pe.edu.upc.gamarra.repository.SuscriptionRepository;
 import pe.edu.upc.gamarra.service.SuscriptionService;
 
@@ -44,6 +45,11 @@ public class SuscriptionServiceImpl implements SuscriptionService {
 	@Override
 	public Optional<Suscription> findById(Long id) throws Exception {	
 		return suscriptionRepository.findById(id);
+	}
+
+	@Override
+	public List<Suscription> findByUserId(User userId) throws Exception {
+		return suscriptionRepository.findByUserId(userId);
 	}
 
 }

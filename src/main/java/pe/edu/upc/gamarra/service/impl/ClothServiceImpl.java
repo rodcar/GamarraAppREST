@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import pe.edu.upc.gamarra.entities.Category;
 import pe.edu.upc.gamarra.entities.Cloth;
 import pe.edu.upc.gamarra.repository.ClothRepository;
 import pe.edu.upc.gamarra.service.ClothService;
@@ -44,6 +45,16 @@ public class ClothServiceImpl implements ClothService {
 	@Override
 	public Optional<Cloth> findById(Long id) throws Exception {	
 		return clothRepository.findById(id);
+	}
+
+	@Override
+	public List<Cloth> findByCategoryId(Category category) {
+		return clothRepository.findByCategoryId(category);
+	}
+
+	@Override
+	public List<Cloth> findByNameContaining(String name) {
+		return clothRepository.findByNameContaining(name);
 	}
 
 }

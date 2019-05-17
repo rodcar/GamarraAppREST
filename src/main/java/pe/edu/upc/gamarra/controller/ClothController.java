@@ -18,31 +18,47 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import pe.edu.upc.gamarra.entities.Cloth;
+import pe.edu.upc.gamarra.entities.Shop;
+import pe.edu.upc.gamarra.entities.ShopCloth;
 import pe.edu.upc.gamarra.service.ClothService;
+import pe.edu.upc.gamarra.service.ShopClothService;
+import pe.edu.upc.gamarra.service.ShopService;
 
 @RestController
-@RequestMapping("/cloth")
+@RequestMapping("/clothes")
 @Api(value = "REST de información sobre prendas")
 public class ClothController {
 
 	@Autowired
 	private ClothService clothService;
 	
+	@Autowired
+	private ShopClothService shopClothService;
+	
+	@Autowired
+	private ShopService shopService;
+	
 	@ApiOperation("Lista de prendas")
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Cloth>> fetchClothes() {
-		try {
-			List<Cloth> clothes = new ArrayList<>();
-			clothes = clothService.findAll();
+	public ResponseEntity<List<Cloth>> fetchClothes(@RequestParam(name = "name", required = false) String name) {
+		if (name == null) {
+			try {
+				List<Cloth> clothes = new ArrayList<>();
+				clothes = clothService.findAll();
+				return new ResponseEntity<List<Cloth>>(clothes, HttpStatus.OK);
+			} catch (Exception e) {
+				return new ResponseEntity<List<Cloth>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		} else {
+			List<Cloth> clothes = clothService.findByNameContaining(name);
 			return new ResponseEntity<List<Cloth>>(clothes, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<List<Cloth>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
@@ -101,6 +117,26 @@ public class ClothController {
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@ApiOperation("Lista de tiendas en las que se encuentra una prenda")
+	@GetMapping(value = "/{id}/shops", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Shop>> findShopsByClothId(@PathVariable("id") Long id) {
+		try {
+			Optional<Cloth> clothFinded = clothService.findById(id);
+			List<ShopCloth> shopCloth = shopClothService.findByClothId(clothFinded.get());
+			
+			Optional<Shop> shop;
+			List<Shop> shops = new ArrayList<>();
+			for(ShopCloth sc : shopCloth) {
+				shop = shopService.findById(sc.getShopId().getId());
+				shops.add(shop.get());
+			}			
+			return new ResponseEntity<>(shops, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

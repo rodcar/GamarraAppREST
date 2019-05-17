@@ -27,7 +27,7 @@ import pe.edu.upc.gamarra.entities.Suscription;
 import pe.edu.upc.gamarra.service.SuscriptionService;
 
 @RestController
-@RequestMapping("/suscription")
+@RequestMapping("/suscriptions")
 @Api(value = "REST de información de suscripciones")
 public class SuscriptionController {
 

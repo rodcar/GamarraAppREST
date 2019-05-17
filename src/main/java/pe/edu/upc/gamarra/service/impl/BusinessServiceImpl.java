@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pe.edu.upc.gamarra.entities.Business;
+import pe.edu.upc.gamarra.entities.User;
 import pe.edu.upc.gamarra.repository.BusinessRepository;
 import pe.edu.upc.gamarra.service.BusinessService;
 
@@ -44,6 +45,11 @@ public class BusinessServiceImpl implements BusinessService {
 	@Override
 	public Optional<Business> findById(Long id) throws Exception {	
 		return businessRepository.findById(id);
+	}
+
+	@Override
+	public List<Business> findByUserId(User userId) throws Exception {
+		return businessRepository.findByUserId(userId);
 	}
 
 }
