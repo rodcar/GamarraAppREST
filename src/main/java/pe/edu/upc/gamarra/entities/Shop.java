@@ -45,6 +45,11 @@ public class Shop {
 	@JoinColumn(name="galleries_id", nullable=false)
 	private Gallery galleryId;
 	
+	@NotNull(message="Debe ser parte de un negocio")
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="businesses_id", nullable=false)
+	private Business businessId;	
+	
 	@OneToMany(mappedBy="shopId", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JsonIgnore
 	private List<ShopCloth> shopCloth;
@@ -112,5 +117,13 @@ public class Shop {
 	public void setShopCloth(List<ShopCloth> shopCloth) {
 		this.shopCloth = shopCloth;
 	}
+
+	public Business getBusinessId() {
+		return businessId;
+	}
+
+	public void setBusinessId(Business businessId) {
+		this.businessId = businessId;
+	}	
 	
 }
