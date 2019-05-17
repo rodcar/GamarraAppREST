@@ -13,4 +13,6 @@ public interface ShopClothService extends CrudService<ShopCloth>{
 	void deleteByShopIdAndClothId(Shop shopId, Cloth clothId) throws Exception;
 	
 	List<ShopCloth> findByShopId(Shop shopId) throws Exception;
+	
+	List<ShopCloth> findByClothId(Cloth clothId) throws Exception;
 }

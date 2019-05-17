@@ -61,4 +61,9 @@ public class ShopClothServiceImpl implements ShopClothService {
 		return shopClothRepository.findByShopId(shopId);
 	}
 
+	@Override
+	public List<ShopCloth> findByClothId(Cloth clothId) throws Exception {
+		return shopClothRepository.findByClothId(clothId);
+	}
+
 }

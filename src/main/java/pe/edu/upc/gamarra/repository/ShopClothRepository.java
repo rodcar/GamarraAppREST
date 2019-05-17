@@ -18,4 +18,6 @@ public interface ShopClothRepository extends JpaRepository<ShopCloth, ShopClothK
 	void deleteByShopIdAndClothId(Shop shopId, Cloth clothId) throws Exception;
 	
 	List<ShopCloth> findByShopId(Shop shopId) throws Exception;
+	
+	List<ShopCloth> findByClothId(Cloth clothId) throws Exception;
 }
