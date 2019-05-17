@@ -10,4 +10,5 @@ import pe.edu.upc.gamarra.entities.Shop;
 @Repository
 public interface ShopRepository extends JpaRepository<Shop, Long>{
 	Optional<Shop> findById(Long id);
+	//List<Shop> findByUserId(Business businessId);
 }
