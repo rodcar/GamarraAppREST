@@ -24,10 +24,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import pe.edu.upc.gamarra.entities.Business;
 import pe.edu.upc.gamarra.entities.Cloth;
 import pe.edu.upc.gamarra.entities.User;
 import pe.edu.upc.gamarra.entities.UserCloth;
 import pe.edu.upc.gamarra.entities.UserClothKey;
+import pe.edu.upc.gamarra.service.BusinessService;
 import pe.edu.upc.gamarra.service.ClothService;
 import pe.edu.upc.gamarra.service.UserClothService;
 import pe.edu.upc.gamarra.service.UserService;
@@ -45,6 +47,9 @@ public class UserController {
 	
 	@Autowired
 	private UserClothService userClothService;
+	
+	@Autowired
+	private BusinessService businessService;
 	
 	@ApiOperation("Lista de usuarios")
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
@@ -214,4 +219,23 @@ public class UserController {
 		}
 	}
 	
+	/* TODO El recurso responde con la información completa del usuario
+			no debería responder con la información del usuario */
+	@ApiOperation("Lista los negocios de un usuario")
+	@GetMapping(value = "/{id}/businesses", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Business>> fetchBusinessesByUserId(@PathVariable("id") Long userId) {
+		try {
+			Optional<User> userFinded = userService.findById(userId);
+			
+			if(!userFinded.isPresent()) {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			} else {			
+				List<Business> userBusinesses = businessService.findByUserId(userFinded.get());		
+				return new ResponseEntity<>(userBusinesses, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}		
+	}
 }
