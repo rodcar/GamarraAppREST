@@ -26,11 +26,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import pe.edu.upc.gamarra.entities.Business;
 import pe.edu.upc.gamarra.entities.Cloth;
+import pe.edu.upc.gamarra.entities.Shop;
 import pe.edu.upc.gamarra.entities.User;
 import pe.edu.upc.gamarra.entities.UserCloth;
 import pe.edu.upc.gamarra.entities.UserClothKey;
 import pe.edu.upc.gamarra.service.BusinessService;
 import pe.edu.upc.gamarra.service.ClothService;
+import pe.edu.upc.gamarra.service.ShopService;
 import pe.edu.upc.gamarra.service.UserClothService;
 import pe.edu.upc.gamarra.service.UserService;
 
@@ -50,6 +52,9 @@ public class UserController {
 	
 	@Autowired
 	private BusinessService businessService;
+	
+	@Autowired
+	private ShopService shopService;
 	
 	@ApiOperation("Lista de usuarios")
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
@@ -236,6 +241,27 @@ public class UserController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}		
+		}
+	}
+	
+	/* TODO El recurso responde con la información completa del usuario y del negocio
+	no debería responder con la información del usuario y del negocio */	
+	@ApiOperation("Lista las tiendas de un negocio")
+	@GetMapping(value = "/{userId}/businesses/{businessId}/shops")
+	public ResponseEntity<List<Shop>> fetchShopsByBusinessId(@PathVariable("userId") Long userId, @PathVariable("businessId") Long businessId) {
+		try {
+			Optional<Business> businessFinded = businessService.findById(businessId);
+			
+			if(!businessFinded.isPresent()) {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			} else {				
+				List<Shop> businessShops = shopService.findByBusinessId(businessFinded.get());
+				return new ResponseEntity<>(businessShops, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 	}
 }
