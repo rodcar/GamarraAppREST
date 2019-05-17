@@ -27,12 +27,14 @@ import io.swagger.annotations.ApiOperation;
 import pe.edu.upc.gamarra.entities.Business;
 import pe.edu.upc.gamarra.entities.Cloth;
 import pe.edu.upc.gamarra.entities.Shop;
+import pe.edu.upc.gamarra.entities.Suscription;
 import pe.edu.upc.gamarra.entities.User;
 import pe.edu.upc.gamarra.entities.UserCloth;
 import pe.edu.upc.gamarra.entities.UserClothKey;
 import pe.edu.upc.gamarra.service.BusinessService;
 import pe.edu.upc.gamarra.service.ClothService;
 import pe.edu.upc.gamarra.service.ShopService;
+import pe.edu.upc.gamarra.service.SuscriptionService;
 import pe.edu.upc.gamarra.service.UserClothService;
 import pe.edu.upc.gamarra.service.UserService;
 
@@ -55,6 +57,9 @@ public class UserController {
 	
 	@Autowired
 	private ShopService shopService;
+	
+	@Autowired
+	private SuscriptionService suscriptionService;
 	
 	@ApiOperation("Lista de usuarios")
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
@@ -263,5 +268,23 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
+	}
+	
+	@ApiOperation("Lista las suscripciones de un usuario")
+	@GetMapping(value = "/{id}/suscriptions", produces = MediaType.APPLICATION_JSON_VALUE)	
+	public ResponseEntity<List<Suscription>> fetchSuscriptionsByUserId(@PathVariable("id") Long id) {
+		try {
+			Optional<User> userFinded =  userService.findById(id);
+			
+			if(!userFinded.isPresent()) {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			} else {
+				List<Suscription> userSuscriptions = suscriptionService.findByUserId(userFinded.get());
+				return new ResponseEntity<List<Suscription>>(userSuscriptions, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 }
