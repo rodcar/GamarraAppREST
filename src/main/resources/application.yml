@@ -1,0 +1,14 @@
+spring:
+  jpa:
+    database: POSTGRESQL
+    hibernate:
+      ddl-auto: update
+    show-sql: 'false'
+    properties.hibernate.temp.use_jdbc_metadata_defaults: false
+  
+spring.jackson.serialization.fail-on-empty-beans: false
+
+gamarra:
+  app:
+    jwtExpiration: 86400
+    jwtSecret: jwtGamarraSecretKey
