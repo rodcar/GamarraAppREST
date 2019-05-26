@@ -62,7 +62,7 @@ public class UserController {
 	@Autowired
 	private SuscriptionService suscriptionService;
 	
-	@ApiOperation("Lista de usuarios")
+	/*@ApiOperation("Lista de usuarios")
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<List<User>> fetchUseres() {
@@ -73,10 +73,12 @@ public class UserController {
 		} catch (Exception e) {
 			return new ResponseEntity<List<User>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	}
+	}*/
 	
+	// Se debe verificar que el usuario registrado en el token solo puede acceder a su información
 	@ApiOperation("Obtener información de un usuario por id")
 	@GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<User> fetchUser(@PathVariable("id") Long id) {
 		try {
 			Optional<User> user = userService.findById(id);
@@ -90,7 +92,7 @@ public class UserController {
 		}		
 	}
 	
-	@ApiOperation("Registro de un usuario")
+	/*@ApiOperation("Registro de un usuario")
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> saveUser(@Valid @RequestBody User user) {
 		try {
@@ -103,10 +105,11 @@ public class UserController {
 		} catch (Exception e) {
 			return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	}
+	}*/
 	
 	@ApiOperation("Actualización de información de un usuario")
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> updateUser(@Valid @RequestBody User user) {
 		try {
 			userService.update(user);
@@ -116,7 +119,7 @@ public class UserController {
 		}
 	}
 	
-	@ApiOperation("Eliminar un usuario por id")
+	/*@ApiOperation("Eliminar un usuario por id")
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
 		try {
@@ -131,10 +134,11 @@ public class UserController {
 		} catch (Exception e) {
 			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	}
+	}*/
 	
 	@ApiOperation("Lista de marcadores")
 	@GetMapping(value = "/{id}/markers", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<List<Cloth>> fetchMarkers(@PathVariable("id") Long userId) {		
 		try {
 			Optional<User> u = userService.findById(userId);
@@ -157,6 +161,7 @@ public class UserController {
 	
 	@ApiOperation("Registro de un marcador")
 	@PostMapping(value= "/{id}/markers", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> saveUserCloth(@PathVariable("id") Long userId, @RequestBody Cloth cloth) {				
 		try {
 			Optional<User> user = userService.findById(userId);
@@ -190,6 +195,7 @@ public class UserController {
 	// TODO Se debe implementar la restricción de no cambiar la fecha de registro del marcador
 	@ApiOperation("Actualización de la información de un marcador")
 	@PutMapping(value = "/{userId}/markers/{clothId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> updateUserCloth(@PathVariable("userId") Long userId, @PathVariable("clothId") Long clothId, @RequestBody UserCloth userCloth) {
 		try {
 			Optional<User> user = userService.findById(userId);
@@ -213,6 +219,7 @@ public class UserController {
 	
 	@ApiOperation("Eliminar un marcador por id")
 	@DeleteMapping(value = "/{userId}/markers/{clothId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<String> deleteUserCloth(@PathVariable("userId") Long userId, @PathVariable("clothId") Long clothId) {	
 		try {
 			Optional<User> u = userService.findById(userId);
@@ -235,6 +242,7 @@ public class UserController {
 			no debería responder con la información del usuario */
 	@ApiOperation("Lista los negocios de un usuario")
 	@GetMapping(value = "/{id}/businesses", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<List<Business>> fetchBusinessesByUserId(@PathVariable("id") Long userId) {
 		try {
 			Optional<User> userFinded = userService.findById(userId);
@@ -273,7 +281,8 @@ public class UserController {
 	}
 	
 	@ApiOperation("Lista las suscripciones de un usuario")
-	@GetMapping(value = "/{id}/suscriptions", produces = MediaType.APPLICATION_JSON_VALUE)	
+	@GetMapping(value = "/{id}/suscriptions", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<List<Suscription>> fetchSuscriptionsByUserId(@PathVariable("id") Long id) {
 		try {
 			Optional<User> userFinded =  userService.findById(id);
