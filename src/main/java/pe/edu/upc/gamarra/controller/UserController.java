@@ -41,7 +41,7 @@ import pe.edu.upc.gamarra.service.UserService;
 
 @RestController
 @RequestMapping("/users")
-@Api(value = "REST de información de usuarios")
+@Api(value = "/users", description ="", tags = {"Users"})
 public class UserController {
 
 	@Autowired

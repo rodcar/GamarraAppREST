@@ -29,7 +29,7 @@ import pe.edu.upc.gamarra.service.SuscriptionService;
 
 @RestController
 @RequestMapping("/suscriptions")
-@Api(value = "REST de información de suscripciones")
+@Api(value = "REST de información de suscripciones", tags = {"Subscriptions"})
 public class SuscriptionController {
 
 	@Autowired

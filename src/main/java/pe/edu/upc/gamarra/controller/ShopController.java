@@ -32,7 +32,7 @@ import pe.edu.upc.gamarra.service.ShopService;
 
 @RestController
 @RequestMapping("/shops")
-@Api(value = "REST de información de tiendas")
+@Api(value = "REST de información de tiendas", tags = {"Shops"})
 public class ShopController {
 
 	@Autowired

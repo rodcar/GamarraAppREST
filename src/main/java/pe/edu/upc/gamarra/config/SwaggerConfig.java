@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.google.common.base.Predicates;
+
+import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.service.VendorExtension;
@@ -26,6 +29,8 @@ public class SwaggerConfig {
 
 	@Bean
 	public Docket api() {
-		return new Docket(DocumentationType.SWAGGER_2).apiInfo(DEFAULT_API_INFO);
+		return new Docket(DocumentationType.SWAGGER_2).apiInfo(DEFAULT_API_INFO).select() 
+		          .apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
+		             .build();
 	}
 }

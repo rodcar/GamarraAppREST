@@ -28,7 +28,7 @@ import pe.edu.upc.gamarra.service.GalleryService;
 
 @RestController
 @RequestMapping("/galleries")
-@Api(value = "REST de información de galerías")
+@Api(value = "REST de información de galerías", tags = {"Galleries"})
 public class GalleryController {
 
 	@Autowired

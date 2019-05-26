@@ -30,7 +30,7 @@ import pe.edu.upc.gamarra.service.ClothService;
 
 @RestController
 @RequestMapping("/categories")
-@Api(value = "REST de información sobre las categorias de ropa")
+@Api(value = "REST de información sobre las categorias de ropa", tags = {"Categories"})
 public class CategoryController {
 
 	@Autowired
