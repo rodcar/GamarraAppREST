@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import pe.edu.upc.gamarra.entities.Role;
 import pe.edu.upc.gamarra.entities.RoleName;
 import pe.edu.upc.gamarra.entities.User;
@@ -34,6 +36,7 @@ import pe.edu.upc.gamarra.security.jwt.JwtProvider;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
+@Api(value = "API para la autenticación", tags = {"Auth"})
 public class AuthRestAPIs {
 
 	@Autowired
@@ -52,6 +55,7 @@ public class AuthRestAPIs {
 	JwtProvider jwtProvider;
 
 	@PostMapping("/signin")
+	@ApiOperation("Autenticación de usuario")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
 
 		Authentication authentication = authenticationManager.authenticate(
@@ -66,6 +70,7 @@ public class AuthRestAPIs {
 	}
 
 	@PostMapping("/signup")
+	@ApiOperation("Registro de usuario")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpForm signUpRequest) {
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			return new ResponseEntity<>(new ResponseMessage("Fallo -> ¡El nombre de usuario ya está en uso!"),
