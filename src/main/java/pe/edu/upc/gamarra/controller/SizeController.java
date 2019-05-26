@@ -28,7 +28,7 @@ import pe.edu.upc.gamarra.service.SizeService;
 
 @RestController
 @RequestMapping("/sizes")
-@Api(value = "REST de información sobra las tallas de ropa")
+@Api(value = "REST de información sobra las tallas de ropa", tags = {"Sizes"})
 public class SizeController {
 
 	@Autowired
@@ -61,6 +61,7 @@ public class SizeController {
 		}		
 	}
 	
+	// TODO No se debe incluir la versión de producción del API
 	@ApiOperation("Registro de una talla de ropa")
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> saveSize(@Valid @RequestBody Size size) {
@@ -75,7 +76,8 @@ public class SizeController {
 			return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
+	// TODO No se debe incluir la versión de producción del API
 	@ApiOperation("Actualización de información de una talla de ropa")
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> updateSize(@Valid @RequestBody Size size) {
@@ -87,6 +89,7 @@ public class SizeController {
 		}
 	}
 	
+	// TODO No se debe incluir la versión de producción del API	
 	@ApiOperation("Eliminar talla de ropa por id")
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteSize(@PathVariable("id") Long id) {

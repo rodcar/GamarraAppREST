@@ -30,7 +30,7 @@ import pe.edu.upc.gamarra.service.ClothService;
 
 @RestController
 @RequestMapping("/categories")
-@Api(value = "REST de información sobre las categorias de ropa")
+@Api(value = "REST de información sobre las categorias de ropa", tags = {"Categories"})
 public class CategoryController {
 
 	@Autowired
@@ -66,6 +66,7 @@ public class CategoryController {
 		}		
 	}
 	
+	// TODO No se debe incluir en la versión de producción del API 	
 	@ApiOperation("Registro de una categoria de ropa")
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> saveCategory(@Valid @RequestBody Category category) {
@@ -81,6 +82,7 @@ public class CategoryController {
 		}
 	}
 	
+	// TODO No se debe incluir en la versión de producción del API 
 	@ApiOperation("Actualización de información de una categoria de ropa")
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> updateCategory(@Valid @RequestBody Category category) {
@@ -92,6 +94,7 @@ public class CategoryController {
 		}
 	}
 	
+	// TODO No se debe incluir en la versión de producción del API 
 	@ApiOperation("Eliminar una categoria de ropa por id")
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteCategory(@PathVariable("id") Long id) {
