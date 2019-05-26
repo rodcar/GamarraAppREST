@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -80,6 +81,7 @@ public class BusinessController {
 	
 	@ApiOperation("Registro de un negocio")
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> saveBusiness(@Valid @RequestBody Business business) {
 		try {
 			Business c = new Business();
@@ -95,6 +97,7 @@ public class BusinessController {
 	
 	@ApiOperation("Actualización de información de un negocio")
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> updateBusiness(@Valid @RequestBody Business business) {
 		try {
 			businessService.update(business);
@@ -106,6 +109,7 @@ public class BusinessController {
 	
 	@ApiOperation("Eliminar un negocio por id")
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<String> deleteBusiness(@PathVariable("id") Long id) {
 		try {
 			Optional<Business> business = businessService.findById(id);
@@ -123,6 +127,7 @@ public class BusinessController {
 	
 	@ApiOperation("Registro de una asociación entre una prenda y una tienda")
 	@PostMapping(value = "/{businessId}/shops/{shopId}/clothes")
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> saveShopCloth(@PathVariable("businessId") Long businessId, @PathVariable("shopId") Long shopId, @RequestBody Cloth cloth) {
 		try {
 			ShopClothKey key = new ShopClothKey();
@@ -147,6 +152,7 @@ public class BusinessController {
 	
 	@ApiOperation("Elimina una asociación entre una prenda y una tienda")
 	@DeleteMapping(value = "/{businessId}/shops/{shopId}/clothes/{clothId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<String> deleteShopCloth(@PathVariable("businessId") Long businessId, @PathVariable("shopId") Long shopId, @PathVariable("clothId") Long clothId) {
 		try {
 			Optional<Shop> s = shopService.findById(shopId);
