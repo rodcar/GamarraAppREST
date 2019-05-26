@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,6 +70,7 @@ public class ShopController {
 	
 	@ApiOperation("Registro de una tienda")
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")	
 	public ResponseEntity<Object> saveShop(@Valid @RequestBody Shop shop) {
 		try {
 			Shop c = new Shop();
@@ -84,6 +86,7 @@ public class ShopController {
 	
 	@ApiOperation("Actualización de información de una tienda")
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> updateShop(@Valid @RequestBody Shop shop) {
 		try {
 			shopService.update(shop);
@@ -95,6 +98,7 @@ public class ShopController {
 	
 	@ApiOperation("Eliminar una tienda por id")
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<String> deleteShop(@PathVariable("id") Long id) {
 		try {
 			Optional<Shop> shop = shopService.findById(id);

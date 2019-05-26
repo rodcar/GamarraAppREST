@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +37,7 @@ public class SuscriptionController {
 	
 	@ApiOperation("Lista de suscripciones")
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<List<Suscription>> fetchSuscriptiones() {
 		try {
 			List<Suscription> suscriptiones = new ArrayList<>();
@@ -48,6 +50,7 @@ public class SuscriptionController {
 	
 	@ApiOperation("Obtener información de una suscripción por id")
 	@GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Suscription> fetchSuscription(@PathVariable("id") Long id) {
 		try {
 			Optional<Suscription> suscription = suscriptionService.findById(id);
@@ -63,6 +66,7 @@ public class SuscriptionController {
 	
 	@ApiOperation("Registro de una suscripción")
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> saveSuscription(@Valid @RequestBody Suscription suscription) {
 		try {
 			Suscription c = new Suscription();
@@ -76,6 +80,7 @@ public class SuscriptionController {
 		}
 	}
 	
+	// TODO No debe incluirse en la versión de producción del API
 	@ApiOperation("Actualización de información de una suscripción")
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> updateSuscription(@Valid @RequestBody Suscription suscription) {
@@ -87,6 +92,7 @@ public class SuscriptionController {
 		}
 	}
 	
+	// TODO No debe incluirse en la versión de producción del API
 	@ApiOperation("Eliminar una suscripción por id")
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteSuscription(@PathVariable("id") Long id) {

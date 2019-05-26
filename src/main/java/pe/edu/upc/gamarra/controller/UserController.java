@@ -62,7 +62,8 @@ public class UserController {
 	@Autowired
 	private SuscriptionService suscriptionService;
 	
-	/*@ApiOperation("Lista de usuarios")
+	// TODO No debe incluirse en la versión de producción del API
+	@ApiOperation("Lista de usuarios")
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<List<User>> fetchUseres() {
@@ -73,7 +74,7 @@ public class UserController {
 		} catch (Exception e) {
 			return new ResponseEntity<List<User>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	}*/
+	}
 	
 	// Se debe verificar que el usuario registrado en el token solo puede acceder a su información
 	@ApiOperation("Obtener información de un usuario por id")

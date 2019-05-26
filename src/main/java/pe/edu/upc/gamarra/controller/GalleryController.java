@@ -61,6 +61,7 @@ public class GalleryController {
 		}		
 	}
 	
+	// TODO No se debe incluir en la versión de producción del API 
 	@ApiOperation("Registro de una galería")
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> saveGallery(@Valid @RequestBody Gallery gallery) {
@@ -76,6 +77,7 @@ public class GalleryController {
 		}
 	}
 	
+	// TODO No se debe incluir en la versión de producción del API 
 	@ApiOperation("Actualización de información de un galería")
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> updateGallery(@Valid @RequestBody Gallery gallery) {
@@ -87,6 +89,7 @@ public class GalleryController {
 		}
 	}
 	
+	// TODO No se debe incluir en la versión de producción del API 
 	@ApiOperation("Eliminar una galería por id")
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteGallery(@PathVariable("id") Long id) {

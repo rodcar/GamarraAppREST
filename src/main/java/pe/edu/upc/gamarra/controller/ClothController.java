@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -79,6 +80,7 @@ public class ClothController {
 	
 	@ApiOperation("Registro de una prenda")
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> saveCloth(@Valid @RequestBody Cloth cloth) {
 		try {
 			Cloth c = new Cloth();
@@ -94,6 +96,7 @@ public class ClothController {
 	
 	@ApiOperation("Actualización de información de una prenda")
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> updateCloth(@Valid @RequestBody Cloth cloth) {
 		try {
 			clothService.update(cloth);
@@ -105,6 +108,7 @@ public class ClothController {
 	
 	@ApiOperation("Eliminar una prenda por id")
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<String> deleteCloth(@PathVariable("id") Long id) {
 		try {
 			Optional<Cloth> cloth = clothService.findById(id);
