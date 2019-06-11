@@ -24,6 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import pe.edu.upc.gamarra.entities.Suscription;
 import pe.edu.upc.gamarra.service.SuscriptionService;
 
@@ -35,7 +36,7 @@ public class SuscriptionController {
 	@Autowired
 	private SuscriptionService suscriptionService;
 	
-	@ApiOperation("Lista de suscripciones")
+	@ApiOperation(value = "Lista de suscripciones", authorizations = @Authorization(value = "Bearer"))
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<List<Suscription>> fetchSuscriptiones() {
@@ -48,7 +49,7 @@ public class SuscriptionController {
 		}
 	}
 	
-	@ApiOperation("Obtener información de una suscripción por id")
+	@ApiOperation(value = "Obtener información de una suscripción por id", authorizations = @Authorization(value = "Bearer"))
 	@GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Suscription> fetchSuscription(@PathVariable("id") Long id) {
@@ -64,7 +65,7 @@ public class SuscriptionController {
 		}		
 	}
 	
-	@ApiOperation("Registro de una suscripción")
+	@ApiOperation(value = "Registro de una suscripción", authorizations = @Authorization(value = "Bearer"))
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> saveSuscription(@Valid @RequestBody Suscription suscription) {
@@ -81,7 +82,7 @@ public class SuscriptionController {
 	}
 	
 	// TODO No debe incluirse en la versión de producción del API
-	@ApiOperation("Actualización de información de una suscripción")
+	@ApiOperation(value = "Actualización de información de una suscripción", authorizations = @Authorization(value = "Bearer"))
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> updateSuscription(@Valid @RequestBody Suscription suscription) {
 		try {
@@ -93,7 +94,7 @@ public class SuscriptionController {
 	}
 	
 	// TODO No debe incluirse en la versión de producción del API
-	@ApiOperation("Eliminar una suscripción por id")
+	@ApiOperation(value = "Eliminar una suscripción por id", authorizations = @Authorization(value = "Bearer"))
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteSuscription(@PathVariable("id") Long id) {
 		try {

@@ -25,6 +25,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import pe.edu.upc.gamarra.entities.Cloth;
 import pe.edu.upc.gamarra.entities.Shop;
 import pe.edu.upc.gamarra.entities.ShopCloth;
@@ -78,7 +79,7 @@ public class ClothController {
 		}		
 	}
 	
-	@ApiOperation("Registro de una prenda")
+	@ApiOperation(value = "Registro de una prenda", authorizations = @Authorization(value = "Bearer"))
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> saveCloth(@Valid @RequestBody Cloth cloth) {
@@ -94,7 +95,7 @@ public class ClothController {
 		}
 	}
 	
-	@ApiOperation("Actualización de información de una prenda")
+	@ApiOperation(value = "Actualización de información de una prenda", authorizations = @Authorization(value = "Bearer"))
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> updateCloth(@Valid @RequestBody Cloth cloth) {
@@ -106,7 +107,7 @@ public class ClothController {
 		}
 	}
 	
-	@ApiOperation("Eliminar una prenda por id")
+	@ApiOperation(value = "Eliminar una prenda por id", authorizations = @Authorization(value = "Bearer"))
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<String> deleteCloth(@PathVariable("id") Long id) {
