@@ -1,5 +1,6 @@
 package pe.edu.upc.gamarra.controller;
 
+import java.security.Principal;
 //import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,6 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -81,8 +86,25 @@ public class UserController {
 	@ApiOperation(value="Obtener información de un usuario por id", authorizations = @Authorization(value = "Bearer"))
 	@GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity<User> fetchUser(@PathVariable("id") Long id) {
+	public ResponseEntity<User> fetchUser(@PathVariable("id") Long id, Principal principal) {
 		try {
+			//UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+			//Optional<User> userAuth = userService.findByUsername(userDetails.getUsername());  
+			
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if (authentication instanceof AnonymousAuthenticationToken) {
+				return new ResponseEntity<User>(HttpStatus.UNAUTHORIZED);
+			}
+
+			UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+			Optional<User> userAuth = userService.findByUsername(userDetails.getUsername());
+			
+			// Valida que un usuario solo pueda obtener su propia información
+			// TODO se debe revisar si userAuth tiene un valor, se puede usar isPresent
+			if(userAuth.get().getId() != id) {
+				return new ResponseEntity<User>(HttpStatus.UNAUTHORIZED);
+			}
+			
 			Optional<User> user = userService.findById(id);
 
 			if (!user.isPresent()) {
