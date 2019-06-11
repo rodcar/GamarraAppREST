@@ -1,6 +1,7 @@
 package pe.edu.upc.gamarra.controller;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -65,8 +66,9 @@ public class AuthRestAPIs {
 
 		String jwt = jwtProvider.generateJwtToken(authentication);
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		Optional<User> userSignIn = userRepository.findByUsername(userDetails.getUsername());
 
-		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername(), userDetails.getAuthorities()));
+		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername(), userSignIn.get().getId(), userDetails.getAuthorities()));
 	}
 
 	@PostMapping("/signup")
