@@ -1,5 +1,6 @@
 package pe.edu.upc.gamarra.controller;
 
+import java.security.Principal;
 //import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,6 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import pe.edu.upc.gamarra.entities.Business;
 import pe.edu.upc.gamarra.entities.Cloth;
 import pe.edu.upc.gamarra.entities.Shop;
@@ -63,7 +69,7 @@ public class UserController {
 	private SuscriptionService suscriptionService;
 	
 	// TODO No debe incluirse en la versión de producción del API
-	@ApiOperation("Lista de usuarios")
+	@ApiOperation(value = "Lista de usuarios", authorizations = @Authorization(value = "Bearer"))
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<List<User>> fetchUseres() {
@@ -77,11 +83,28 @@ public class UserController {
 	}
 	
 	// Se debe verificar que el usuario registrado en el token solo puede acceder a su información
-	@ApiOperation("Obtener información de un usuario por id")
+	@ApiOperation(value="Obtener información de un usuario por id", authorizations = @Authorization(value = "Bearer"))
 	@GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity<User> fetchUser(@PathVariable("id") Long id) {
+	public ResponseEntity<User> fetchUser(@PathVariable("id") Long id, Principal principal) {
 		try {
+			//UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+			//Optional<User> userAuth = userService.findByUsername(userDetails.getUsername());  
+			
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if (authentication instanceof AnonymousAuthenticationToken) {
+				return new ResponseEntity<User>(HttpStatus.UNAUTHORIZED);
+			}
+
+			UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+			Optional<User> userAuth = userService.findByUsername(userDetails.getUsername());
+			
+			// Valida que un usuario solo pueda obtener su propia información
+			// TODO se debe revisar si userAuth tiene un valor, se puede usar isPresent
+			if(userAuth.get().getId() != id) {
+				return new ResponseEntity<User>(HttpStatus.UNAUTHORIZED);
+			}
+			
 			Optional<User> user = userService.findById(id);
 
 			if (!user.isPresent()) {
@@ -108,7 +131,7 @@ public class UserController {
 		}
 	}*/
 	
-	@ApiOperation("Actualización de información de un usuario")
+	@ApiOperation(value="Actualización de información de un usuario", authorizations = @Authorization(value = "Bearer"))
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> updateUser(@Valid @RequestBody User user) {
@@ -137,7 +160,7 @@ public class UserController {
 		}
 	}*/
 	
-	@ApiOperation("Lista de marcadores")
+	@ApiOperation(value = "Lista de marcadores", authorizations = @Authorization(value = "Bearer"))
 	@GetMapping(value = "/{id}/markers", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<List<Cloth>> fetchMarkers(@PathVariable("id") Long userId) {		
@@ -160,7 +183,7 @@ public class UserController {
 		}
 	}
 	
-	@ApiOperation("Registro de un marcador")
+	@ApiOperation(value = "Registro de un marcador", authorizations = @Authorization(value = "Bearer"))
 	@PostMapping(value= "/{id}/markers", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> saveUserCloth(@PathVariable("id") Long userId, @RequestBody Cloth cloth) {				
@@ -194,7 +217,7 @@ public class UserController {
 	}
 	
 	// TODO Se debe implementar la restricción de no cambiar la fecha de registro del marcador
-	@ApiOperation("Actualización de la información de un marcador")
+	@ApiOperation(value = "Actualización de la información de un marcador", authorizations = @Authorization(value = "Bearer"))
 	@PutMapping(value = "/{userId}/markers/{clothId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> updateUserCloth(@PathVariable("userId") Long userId, @PathVariable("clothId") Long clothId, @RequestBody UserCloth userCloth) {
@@ -218,7 +241,7 @@ public class UserController {
 		}
 	}
 	
-	@ApiOperation("Eliminar un marcador por id")
+	@ApiOperation(value = "Eliminar un marcador por id", authorizations = @Authorization(value = "Bearer"))
 	@DeleteMapping(value = "/{userId}/markers/{clothId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<String> deleteUserCloth(@PathVariable("userId") Long userId, @PathVariable("clothId") Long clothId) {	
@@ -241,7 +264,7 @@ public class UserController {
 	
 	/* TODO El recurso responde con la información completa del usuario
 			no debería responder con la información del usuario */
-	@ApiOperation("Lista los negocios de un usuario")
+	@ApiOperation(value = "Lista los negocios de un usuario", authorizations = @Authorization(value = "Bearer"))
 	@GetMapping(value = "/{id}/businesses", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<List<Business>> fetchBusinessesByUserId(@PathVariable("id") Long userId) {
@@ -281,7 +304,7 @@ public class UserController {
 		
 	}
 	
-	@ApiOperation("Lista las suscripciones de un usuario")
+	@ApiOperation(value = "Lista las suscripciones de un usuario", authorizations = @Authorization(value = "Bearer"))
 	@GetMapping(value = "/{id}/suscriptions", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<List<Suscription>> fetchSuscriptionsByUserId(@PathVariable("id") Long id) {

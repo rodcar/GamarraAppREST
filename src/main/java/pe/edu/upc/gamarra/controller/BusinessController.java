@@ -25,6 +25,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import pe.edu.upc.gamarra.entities.Business;
 import pe.edu.upc.gamarra.entities.Cloth;
 import pe.edu.upc.gamarra.entities.Shop;
@@ -52,7 +53,7 @@ public class BusinessController {
 	@Autowired
 	private ClothService clothService;
 	
-	@ApiOperation("Lista de negocios")
+	@ApiOperation(value = "Lista de negocios", authorizations = @Authorization(value = "Bearer"))
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Business>> fetchBusinesses() {
 		try {
@@ -79,7 +80,7 @@ public class BusinessController {
 		}		
 	}
 	
-	@ApiOperation("Registro de un negocio")
+	@ApiOperation(value = "Registro de un negocio", authorizations = @Authorization(value = "Bearer"))
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> saveBusiness(@Valid @RequestBody Business business) {
@@ -95,7 +96,7 @@ public class BusinessController {
 		}
 	}
 	
-	@ApiOperation("Actualización de información de un negocio")
+	@ApiOperation(value = "Actualización de información de un negocio", authorizations = @Authorization(value = "Bearer"))
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> updateBusiness(@Valid @RequestBody Business business) {
@@ -107,7 +108,7 @@ public class BusinessController {
 		}
 	}
 	
-	@ApiOperation("Eliminar un negocio por id")
+	@ApiOperation(value = "Eliminar un negocio por id", authorizations = @Authorization(value = "Bearer"))
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<String> deleteBusiness(@PathVariable("id") Long id) {
@@ -125,7 +126,7 @@ public class BusinessController {
 		}
 	}
 	
-	@ApiOperation("Registro de una asociación entre una prenda y una tienda")
+	@ApiOperation(value = "Registro de una asociación entre una prenda y una tienda", authorizations = @Authorization(value = "Bearer"))
 	@PostMapping(value = "/{businessId}/shops/{shopId}/clothes")
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> saveShopCloth(@PathVariable("businessId") Long businessId, @PathVariable("shopId") Long shopId, @RequestBody Cloth cloth) {
@@ -150,7 +151,7 @@ public class BusinessController {
 		}
 	}
 	
-	@ApiOperation("Elimina una asociación entre una prenda y una tienda")
+	@ApiOperation(value = "Elimina una asociación entre una prenda y una tienda", authorizations = @Authorization(value = "Bearer"))
 	@DeleteMapping(value = "/{businessId}/shops/{shopId}/clothes/{clothId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<String> deleteShopCloth(@PathVariable("businessId") Long businessId, @PathVariable("shopId") Long shopId, @PathVariable("clothId") Long clothId) {

@@ -23,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import pe.edu.upc.gamarra.entities.Size;
 import pe.edu.upc.gamarra.service.SizeService;
 
@@ -62,7 +63,7 @@ public class SizeController {
 	}
 	
 	// TODO No se debe incluir la versión de producción del API
-	@ApiOperation("Registro de una talla de ropa")
+	@ApiOperation(value = "Registro de una talla de ropa", authorizations = @Authorization(value = "Bearer"))
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> saveSize(@Valid @RequestBody Size size) {
 		try {
@@ -78,7 +79,7 @@ public class SizeController {
 	}
 
 	// TODO No se debe incluir la versión de producción del API
-	@ApiOperation("Actualización de información de una talla de ropa")
+	@ApiOperation(value = "Actualización de información de una talla de ropa", authorizations = @Authorization(value = "Bearer"))
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> updateSize(@Valid @RequestBody Size size) {
 		try {
@@ -90,7 +91,7 @@ public class SizeController {
 	}
 	
 	// TODO No se debe incluir la versión de producción del API	
-	@ApiOperation("Eliminar talla de ropa por id")
+	@ApiOperation(value = "Eliminar talla de ropa por id", authorizations = @Authorization(value = "Bearer"))
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteSize(@PathVariable("id") Long id) {
 		try {

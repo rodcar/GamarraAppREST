@@ -24,6 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import pe.edu.upc.gamarra.entities.Cloth;
 import pe.edu.upc.gamarra.entities.Shop;
 import pe.edu.upc.gamarra.entities.ShopCloth;
@@ -68,7 +69,7 @@ public class ShopController {
 		}		
 	}
 	
-	@ApiOperation("Registro de una tienda")
+	@ApiOperation(value = "Registro de una tienda", authorizations = @Authorization(value = "Bearer"))
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")	
 	public ResponseEntity<Object> saveShop(@Valid @RequestBody Shop shop) {
@@ -84,7 +85,7 @@ public class ShopController {
 		}
 	}
 	
-	@ApiOperation("Actualización de información de una tienda")
+	@ApiOperation(value = "Actualización de información de una tienda", authorizations = @Authorization(value = "Bearer"))
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> updateShop(@Valid @RequestBody Shop shop) {
@@ -96,7 +97,7 @@ public class ShopController {
 		}
 	}
 	
-	@ApiOperation("Eliminar una tienda por id")
+	@ApiOperation(value = "Eliminar una tienda por id", authorizations = @Authorization(value = "Bearer"))
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<String> deleteShop(@PathVariable("id") Long id) {

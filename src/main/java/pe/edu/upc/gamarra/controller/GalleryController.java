@@ -23,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import pe.edu.upc.gamarra.entities.Gallery;
 import pe.edu.upc.gamarra.service.GalleryService;
 
@@ -62,7 +63,7 @@ public class GalleryController {
 	}
 	
 	// TODO No se debe incluir en la versión de producción del API 
-	@ApiOperation("Registro de una galería")
+	@ApiOperation(value = "Registro de una galería", authorizations = @Authorization(value = "Bearer"))
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> saveGallery(@Valid @RequestBody Gallery gallery) {
 		try {
@@ -78,7 +79,7 @@ public class GalleryController {
 	}
 	
 	// TODO No se debe incluir en la versión de producción del API 
-	@ApiOperation("Actualización de información de un galería")
+	@ApiOperation(value = "Actualización de información de un galería", authorizations = @Authorization(value = "Bearer"))
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> updateGallery(@Valid @RequestBody Gallery gallery) {
 		try {
@@ -90,7 +91,7 @@ public class GalleryController {
 	}
 	
 	// TODO No se debe incluir en la versión de producción del API 
-	@ApiOperation("Eliminar una galería por id")
+	@ApiOperation(value = "Eliminar una galería por id", authorizations = @Authorization(value = "Bearer"))
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteGallery(@PathVariable("id") Long id) {
 		try {

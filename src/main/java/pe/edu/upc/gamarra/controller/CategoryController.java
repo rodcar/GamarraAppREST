@@ -23,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import pe.edu.upc.gamarra.entities.Category;
 import pe.edu.upc.gamarra.entities.Cloth;
 import pe.edu.upc.gamarra.service.CategoryService;
@@ -67,7 +68,7 @@ public class CategoryController {
 	}
 	
 	// TODO No se debe incluir en la versión de producción del API 	
-	@ApiOperation("Registro de una categoria de ropa")
+	@ApiOperation(value = "Registro de una categoria de ropa", authorizations = @Authorization(value = "Bearer"))
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> saveCategory(@Valid @RequestBody Category category) {
 		try {
@@ -83,7 +84,7 @@ public class CategoryController {
 	}
 	
 	// TODO No se debe incluir en la versión de producción del API 
-	@ApiOperation("Actualización de información de una categoria de ropa")
+	@ApiOperation(value = "Actualización de información de una categoria de ropa", authorizations = @Authorization(value = "Bearer"))
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> updateCategory(@Valid @RequestBody Category category) {
 		try {
@@ -95,7 +96,7 @@ public class CategoryController {
 	}
 	
 	// TODO No se debe incluir en la versión de producción del API 
-	@ApiOperation("Eliminar una categoria de ropa por id")
+	@ApiOperation(value = "Eliminar una categoria de ropa por id", authorizations = @Authorization(value = "Bearer"))
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteCategory(@PathVariable("id") Long id) {
 		try {
