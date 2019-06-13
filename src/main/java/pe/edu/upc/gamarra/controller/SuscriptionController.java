@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,19 +24,21 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import pe.edu.upc.gamarra.entities.Suscription;
 import pe.edu.upc.gamarra.service.SuscriptionService;
 
 @RestController
-@RequestMapping("/suscription")
-@Api(value = "REST de información de suscripciones")
+@RequestMapping("/suscriptions")
+@Api(value = "REST de información de suscripciones", tags = {"Subscriptions"})
 public class SuscriptionController {
 
 	@Autowired
 	private SuscriptionService suscriptionService;
 	
-	@ApiOperation("Lista de suscripciones")
+	@ApiOperation(value = "Lista de suscripciones", authorizations = @Authorization(value = "Bearer"))
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<List<Suscription>> fetchSuscriptiones() {
 		try {
 			List<Suscription> suscriptiones = new ArrayList<>();
@@ -46,8 +49,9 @@ public class SuscriptionController {
 		}
 	}
 	
-	@ApiOperation("Obtener información de una suscripción por id")
+	@ApiOperation(value = "Obtener información de una suscripción por id", authorizations = @Authorization(value = "Bearer"))
 	@GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Suscription> fetchSuscription(@PathVariable("id") Long id) {
 		try {
 			Optional<Suscription> suscription = suscriptionService.findById(id);
@@ -61,8 +65,9 @@ public class SuscriptionController {
 		}		
 	}
 	
-	@ApiOperation("Registro de una suscripción")
+	@ApiOperation(value = "Registro de una suscripción", authorizations = @Authorization(value = "Bearer"))
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Object> saveSuscription(@Valid @RequestBody Suscription suscription) {
 		try {
 			Suscription c = new Suscription();
@@ -76,7 +81,8 @@ public class SuscriptionController {
 		}
 	}
 	
-	@ApiOperation("Actualización de información de una suscripción")
+	// TODO No debe incluirse en la versión de producción del API
+	@ApiOperation(value = "Actualización de información de una suscripción", authorizations = @Authorization(value = "Bearer"))
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> updateSuscription(@Valid @RequestBody Suscription suscription) {
 		try {
@@ -87,7 +93,8 @@ public class SuscriptionController {
 		}
 	}
 	
-	@ApiOperation("Eliminar una suscripción por id")
+	// TODO No debe incluirse en la versión de producción del API
+	@ApiOperation(value = "Eliminar una suscripción por id", authorizations = @Authorization(value = "Bearer"))
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteSuscription(@PathVariable("id") Long id) {
 		try {

@@ -23,16 +23,22 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import pe.edu.upc.gamarra.entities.Category;
+import pe.edu.upc.gamarra.entities.Cloth;
 import pe.edu.upc.gamarra.service.CategoryService;
+import pe.edu.upc.gamarra.service.ClothService;
 
 @RestController
-@RequestMapping("/category")
-@Api(value = "REST de información sobre las categorias de ropa")
+@RequestMapping("/categories")
+@Api(value = "REST de información sobre las categorias de ropa", tags = {"Categories"})
 public class CategoryController {
 
 	@Autowired
 	private CategoryService categoryService;
+	
+	@Autowired
+	private ClothService clothService;
 	
 	@ApiOperation("Lista de categorias de ropa")
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
@@ -61,7 +67,8 @@ public class CategoryController {
 		}		
 	}
 	
-	@ApiOperation("Registro de una categoria de ropa")
+	// TODO No se debe incluir en la versión de producción del API 	
+	@ApiOperation(value = "Registro de una categoria de ropa", authorizations = @Authorization(value = "Bearer"))
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> saveCategory(@Valid @RequestBody Category category) {
 		try {
@@ -76,7 +83,8 @@ public class CategoryController {
 		}
 	}
 	
-	@ApiOperation("Actualización de información de una categoria de ropa")
+	// TODO No se debe incluir en la versión de producción del API 
+	@ApiOperation(value = "Actualización de información de una categoria de ropa", authorizations = @Authorization(value = "Bearer"))
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> updateCategory(@Valid @RequestBody Category category) {
 		try {
@@ -87,7 +95,8 @@ public class CategoryController {
 		}
 	}
 	
-	@ApiOperation("Eliminar una categoria de ropa por id")
+	// TODO No se debe incluir en la versión de producción del API 
+	@ApiOperation(value = "Eliminar una categoria de ropa por id", authorizations = @Authorization(value = "Bearer"))
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteCategory(@PathVariable("id") Long id) {
 		try {
@@ -101,6 +110,19 @@ public class CategoryController {
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@ApiOperation("Lista de prendas por categoría")
+	@GetMapping(value = "/{id}/clothes", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Cloth>> getClothesByCategoryId(@PathVariable("id") Long id) {
+		try {
+			Optional<Category> category = categoryService.findById(id);
+			List<Cloth> clothes = clothService.findByCategoryId(category.get());
+			return new ResponseEntity<>(clothes, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<List<Cloth>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

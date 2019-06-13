@@ -24,51 +24,51 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
-import pe.edu.upc.gamarra.entities.Size;
-import pe.edu.upc.gamarra.service.SizeService;
+import pe.edu.upc.gamarra.entities.Gallery;
+import pe.edu.upc.gamarra.service.GalleryService;
 
 @RestController
-@RequestMapping("/sizes")
-@Api(value = "REST de información sobra las tallas de ropa", tags = {"Sizes"})
-public class SizeController {
+@RequestMapping("/galleries")
+@Api(value = "REST de información de galerías", tags = {"Galleries"})
+public class GalleryController {
 
 	@Autowired
-	private SizeService sizeService;
+	private GalleryService galleryService;
 	
-	@ApiOperation("Lista de tallas de ropa")
+	@ApiOperation("Lista de galerías")
 	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Size>> fetchSizees() {
+	public ResponseEntity<List<Gallery>> fetchGalleryes() {
 		try {
-			List<Size> sizees = new ArrayList<>();
-			sizees = sizeService.findAll();
-			return new ResponseEntity<List<Size>>(sizees, HttpStatus.OK);
+			List<Gallery> galleryes = new ArrayList<>();
+			galleryes = galleryService.findAll();
+			return new ResponseEntity<List<Gallery>>(galleryes, HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<List<Size>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<List<Gallery>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
-	@ApiOperation("Obtener información de una talla de ropa por id")
+	@ApiOperation("Obtener información de una galería por id")
 	@GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Size> fetchSize(@PathVariable("id") Long id) {
+	public ResponseEntity<Gallery> fetchGallery(@PathVariable("id") Long id) {
 		try {
-			Optional<Size> size = sizeService.findById(id);
+			Optional<Gallery> gallery = galleryService.findById(id);
 
-			if (!size.isPresent()) {
-				return new ResponseEntity<Size>(HttpStatus.NOT_FOUND);
+			if (!gallery.isPresent()) {
+				return new ResponseEntity<Gallery>(HttpStatus.NOT_FOUND);
 			}
-			return new ResponseEntity<Size>(size.get(), HttpStatus.OK);
+			return new ResponseEntity<Gallery>(gallery.get(), HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<Size>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<Gallery>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}		
 	}
 	
-	// TODO No se debe incluir la versión de producción del API
-	@ApiOperation(value = "Registro de una talla de ropa", authorizations = @Authorization(value = "Bearer"))
+	// TODO No se debe incluir en la versión de producción del API 
+	@ApiOperation(value = "Registro de una galería", authorizations = @Authorization(value = "Bearer"))
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> saveSize(@Valid @RequestBody Size size) {
+	public ResponseEntity<Object> saveGallery(@Valid @RequestBody Gallery gallery) {
 		try {
-			Size c = new Size();
-			c = sizeService.save(size);
+			Gallery c = new Gallery();
+			c = galleryService.save(gallery);
 
 			URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(c.getId())
 					.toUri();
@@ -77,31 +77,31 @@ public class SizeController {
 			return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
-	// TODO No se debe incluir la versión de producción del API
-	@ApiOperation(value = "Actualización de información de una talla de ropa", authorizations = @Authorization(value = "Bearer"))
+	
+	// TODO No se debe incluir en la versión de producción del API 
+	@ApiOperation(value = "Actualización de información de un galería", authorizations = @Authorization(value = "Bearer"))
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> updateSize(@Valid @RequestBody Size size) {
+	public ResponseEntity<Object> updateGallery(@Valid @RequestBody Gallery gallery) {
 		try {
-			sizeService.update(size);
+			galleryService.update(gallery);
 			return new ResponseEntity<Object>(HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
-	// TODO No se debe incluir la versión de producción del API	
-	@ApiOperation(value = "Eliminar talla de ropa por id", authorizations = @Authorization(value = "Bearer"))
+	// TODO No se debe incluir en la versión de producción del API 
+	@ApiOperation(value = "Eliminar una galería por id", authorizations = @Authorization(value = "Bearer"))
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> deleteSize(@PathVariable("id") Long id) {
+	public ResponseEntity<String> deleteGallery(@PathVariable("id") Long id) {
 		try {
-			Optional<Size> size = sizeService.findById(id);
+			Optional<Gallery> gallery = galleryService.findById(id);
 
-			if (!size.isPresent()) {
+			if (!gallery.isPresent()) {
 				return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 			} else {
-				sizeService.deleteById(id);
-				return new ResponseEntity<>("El size se elimino", HttpStatus.OK);
+				galleryService.deleteById(id);
+				return new ResponseEntity<>("El gallery se elimino", HttpStatus.OK);
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
